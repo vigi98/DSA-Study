@@ -1,0 +1,56 @@
+class Solution {
+    public class Pair implements Comparable<Pair>{
+        int pt,ht;
+        Pair(int pt,int ht){
+            this.pt=pt;
+            this.ht=ht;
+        }
+        
+        public int compareTo(Pair o){
+            if(this.pt!=o.pt)
+                return this.pt-o.pt;
+            else
+                return this.ht-o.ht;
+        }
+        public String toString(){
+            return pt+","+ht+".";
+        }
+    }
+    public List<List<Integer>> getSkyline(int[][] buildings) {
+        int totalBPair=buildings.length;
+        List<List<Integer>>res= new ArrayList<>();
+        Pair[]ps= new Pair[totalBPair*2];
+        PriorityQueue<Integer>pq= new PriorityQueue<>(Collections.reverseOrder());
+        int currht=0;
+        
+        int k=0;
+        for(int i=0;i<totalBPair;i++){
+            Pair pair1= new Pair(buildings[i][0],-buildings[i][2]);
+            Pair pair2= new Pair(buildings[i][1],buildings[i][2]);
+            ps[k++]=pair1;
+            ps[k++]=pair2;
+        }
+        
+        Arrays.sort(ps);
+        pq.add(0);
+        // System.out.println(Arrays.toString(p));
+        for(Pair p:ps){
+            if(p.ht<0)
+                pq.add(-p.ht);
+            else
+                pq.remove(p.ht);
+            
+            if(pq.peek()!=currht){
+                    currht=pq.peek();
+                    List<Integer>li= new ArrayList<>();
+                    li.add(p.pt);
+                    li.add(currht);
+                    res.add(li);
+                }
+    
+        }
+        return res;
+    }
+    
+  
+}

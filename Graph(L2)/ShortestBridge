@@ -1,0 +1,69 @@
+class Solution {
+    
+    private class Pair{
+        int r,c,l;
+        Pair(int r,int c,int l){
+            this.r=r;
+            this.c=c;
+            this.l=l;
+        }
+        public String toString(){
+            return this.r+" "+this.c+" "+this.l;
+        }
+    }
+    public int shortestBridge(int[][] grid) {
+        
+        int n=grid.length,m=grid[0].length;
+        Queue<Pair>q=new ArrayDeque<>();
+        boolean[][]vis= new boolean[n][m];
+        
+        o:for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==1){
+                    dfs(i,j,q,vis,grid);
+                    // System.out.println("Break occures");
+                    break o;
+                }
+            }
+            // System.out.println("Outer"+i);
+        }
+        
+        // System.out.println(q);
+        
+        //Find other island
+         while(q.size()!=0){
+            Pair top=q.remove();
+            
+            for(int i=0;i<4;i++){
+              int rdash=top.r+dir[i][0];
+              int cdash=top.c+dir[i][1];
+                
+              if(rdash>=0 && cdash>=0 && rdash<n && cdash<m && vis[rdash][cdash]==false){
+                  if(grid[rdash][cdash]==1){
+                      // ans=top.l+1;
+                      // break o;
+                      return top.l;
+                  }
+                  vis[rdash][cdash]=true;
+                  q.add(new Pair(rdash,cdash,top.l+1));
+              }
+            } 
+        }
+        
+        return -1;
+    }
+    
+    int[][]dir={{0,1},{1,0},{-1,0},{0,-1}};
+    private void dfs(int r,int c,Queue<Pair>q,boolean[][]vis,int[][]grid){
+        
+        if(r<0||c<0||r>=grid.length||c>=grid[0].length||vis[r][c]==true||grid[r][c]==0)
+            return;
+        
+        vis[r][c]=true;
+        q.add(new Pair(r,c,0));
+        for(int i=0;i<4;i++){
+            dfs(r+dir[i][0],c+dir[i][1],q,vis,grid);
+        }
+        
+    }
+}

@@ -1,0 +1,60 @@
+
+class FreqStack {
+
+    private int maxf;
+      //int,freq
+      private HashMap<Integer,Integer>fm;
+      //freq,stacker,Sta
+      private HashMap<Integck<Integer>>hm;
+
+    public FreqStack() {
+        fm= new HashMap<>();
+        hm= new HashMap<>();
+    }
+      
+      IP//can give: hm.computeIfAbsent(freq,k->new Stack<>()).push(val);
+      private void createStackMap(int freq,int val){
+        if(!hm.containsKey(freq))
+          hm.put(freq,new Stack<>());
+        
+        hm.get(freq).push(val);
+      }
+      
+      private void createFreqMap(int val){
+        if(!fm.containsKey(val))
+         fm.put(val,1);
+        else
+         fm.put(val,fm.get(val)+1);
+      }
+      
+      public void push(int val){
+          
+        createFreqMap(val);
+        int curFreq=fm.get(val);
+        createStackMap(curFreq,val);
+        maxf=Math.max(maxf,curFreq);
+      }
+      
+      public int pop(){
+          //see maxf val
+          //go to that stack in hm
+          //pop the top
+          //if stack empty then delete the freq-stack pair and reduce maxf
+          //reduce fm value of poped element
+          //if reduced new value is 0(can or need not delelete it as it will not harm )
+          Stack<Integer>maxfStack=hm.get(maxf);
+          
+          int popedElement=maxfStack.peek();
+          maxfStack.pop();
+          
+          if(maxfStack.size()==0)
+          {
+              hm.remove(maxf);
+              maxf--;
+          }
+          
+          fm.put(popedElement,fm.get(popedElement)-1);
+          return popedElement;
+      }
+}
+

@@ -1,0 +1,62 @@
+class Solution {
+    
+    private class Border{
+        int row,col;
+        Border(int r,int c){
+            row=r;
+            col=c;
+        }
+    }
+    
+    public int[][] colorBorder(int[][] grid, int row, int col, int color) {
+        ArrayList<Border>borderList= new ArrayList<>();
+        int n=grid.length,m=grid[0].length;
+        
+        int origColor=grid[row][col];
+        
+        markBorder(row,col,origColor,grid,borderList);
+        
+        for(Border b: borderList){
+            grid[b.row][b.col]=color;
+        }
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(grid[i][j]==-1*origColor)
+                    grid[i][j]=origColor;
+            }
+        }
+        
+        return grid;
+        
+        
+    }
+    
+    int [][]dir={{1,0},{0,1},{-1,0},{0,-1}};
+    private boolean markBorder(int r,int c,int origColor,int[][]grid,ArrayList<Border>borderList){
+        
+        if(r<0||c<0||r>=grid.length||c>=grid[0].length)//is out of bound or already visited
+        {
+            return false;//is not part of component[but node calling this is Border material]
+        }
+        
+        if(grid[r][c]==-1*origColor)//is visited already
+            return true;//true as it is part of component
+        
+        if(grid[r][c]!=origColor && grid[r][c]!=-1*origColor)//if node is not visited and also is not equal to compoNent color
+            return false;
+        
+        boolean isBorder=false;
+        grid[r][c]=-1*origColor;
+        for(int i=0;i<4;i++){
+            if(!markBorder(r+dir[i][0],c+dir[i][1],origColor,grid,borderList))//Check if any of the components is not part of the connected component
+                isBorder=true;
+        }
+        
+        if(isBorder)
+          borderList.add(new Border(r,c));
+        
+        return true;//Is a part of component
+        
+    }
+}

@@ -1,0 +1,51 @@
+class Solution {
+    private class Pair{
+        int x,y,d;
+        Pair(int x,int y,int d){
+            this.x=x;
+            this.y=y;
+            this.d=d;
+        }
+    }
+    //TC->O(n*m*4)
+    //SC->O(n*m):queue, if all are land
+    public int maxDistance(int[][] grid) {
+    
+        Queue<Pair>q= new ArrayDeque<>();
+        int n=grid.length;
+        int m=grid[0].length;
+        int watercell=0;
+        int maxDist=0;
+        
+        for(int i=0;i<n;i++)
+            for(int j=0;j<m;j++)
+            {
+                if(grid[i][j]==1)
+                    q.add(new Pair(i,j,0));
+                else
+                    watercell++;
+            }
+        
+        if(q.size()==0||watercell==0)
+            return -1;
+        
+        int []dx={1,-1,0,0};
+        int []dy={0,0,1,-1};
+        
+        while(q.size()!=0){
+            Pair top=q.remove();
+            maxDist=Math.max(maxDist,top.d);
+            
+            for(int j=0;j<4;j++){
+                int xdash=top.x+dx[j];
+                int ydash=top.y+dy[j];
+                if(xdash>=0 && ydash>=0 && xdash<n && ydash<m && grid[xdash][ydash]==0){
+                    grid[xdash][ydash]=1;
+                    q.add(new Pair(xdash,ydash,top.d+1));
+                }
+            }
+        }
+        
+        return maxDist;
+    }
+}

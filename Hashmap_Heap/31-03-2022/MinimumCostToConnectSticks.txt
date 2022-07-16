@@ -1,0 +1,45 @@
+Qn Link:https://practice.geeksforgeeks.org/problems/minimum-cost-of-ropes-1587115620/1
+
+1]
+Using PQ: try for :4 2 7 6 9. Actual output ->62
+
+ long minCost(long arr[], int n) 
+    {
+        if(n==1)
+         return 0;
+         
+        PriorityQueue<Long>pq= new PriorityQueue<>();
+        long cost=0;
+        for(long e:arr)
+         pq.add(e);
+        
+    
+        while(pq.size()!=1){
+            long s1=pq.remove();
+            long s2=pq.remove();
+            cost+=s1+s2;
+            pq.add(s1+s2);
+        }
+        
+    return cost;
+    }
+
+2]
+//Wrong way: try for :4 2 7 6 9. Actual output ->62 but below code o/p->65
+Reason : it will add  smallest rod to joined joined rod rather than taking 2 smallest rods. It will take 1 small rod and join with the recent joined rods
+ ans= joined rod + nextSmallerRod
+ actualans= 1st smallest rod + 2nd smallest rod.
+ //wrong code 
+long minCost(long arr[], int n) 
+    {
+        if(n==1)
+         return 0;
+    Arrays.sort(arr);
+    long s=arr[0];
+    long ans=0;
+    for(int i=1;i<n;i++){
+        s+=arr[i];
+        ans+=s;
+    }
+    return ans;
+    }

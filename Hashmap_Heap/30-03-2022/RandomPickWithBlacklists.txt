@@ -1,0 +1,108 @@
+//optimized soln
+class Solution {
+
+    private int n,wls;
+    private int []blacklist;
+    HashMap<Integer,Integer>hm;
+
+    public Solution(int n, int[] blacklist) {
+        // this.n=n;
+        // this.blacklist=blacklist;
+        int bls=blacklist.length;
+        wls=n-bls;
+        hm= new HashMap<>();
+        
+        // System.out.println(hm);
+        
+        for(int e:blacklist){
+            //only blaclist elements less than whitelist size are added to hm 
+            // if(e<=wls-1)
+               hm.put(e,-1);
+        }
+       
+        //Pushing all blacklist at end by Mapping blacklist at top with whitelist at bottom
+        int k=n-1;
+        // Set<Integer>key=hm.keySet();
+        for(int e:blacklist){
+            
+            if(k<=wls-1)
+                break;
+            
+            if(e<=wls-1){
+                //while it is a blacklist elem then move backward till u find whitelist elem
+                while(hm.containsKey(k)) 
+                    k--;
+                
+                hm.put(e,k);
+                k--;
+            }
+        }
+    }
+    
+    public int pick() {
+        Random r= new Random();
+        int e=r.nextInt(wls);
+        e=hm.get(e)==null?e:hm.get(e);
+        return e;
+    }
+}
+Can we use HashMap<Integer,ArrayList<Integer>>hm= new HashMap<>() and solve the qn?
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(n, blacklist);
+ * int param_1 = obj.pick();
+ */
+ //2
+//TC exceded soln
+class Solution {
+
+    private int n;
+    private int []blacklist;
+    public Solution(int n, int[] blacklist) {
+        this.n=n;
+        this.blacklist=blacklist;
+    }
+    
+    public int pick() {
+        
+        int bls=blacklist.length,wls=n-bls;
+        HashMap<Integer,Integer>hm= new HashMap<>();
+        
+        // System.out.println(hm);
+        
+        // //initialize all with 0
+        // for(int i=0;i<n;i++){
+        //     hm.put(i,0);
+        // }
+        //initialize blaclists with -1
+        for(int e:blacklist){
+            hm.put(e,-1);
+        }
+       
+        //Pushing all blacklist at end by Mapping blacklist at top with whitelist at bottom
+        int k=n-1;
+        for(int i=0;i<wls;i++){//wls:whitelist size =n-bls
+            if(hm.get(i)==null)
+                continue;
+            
+            //else for blacklist elements
+            while(hm.get(k)!=null){
+                k--;
+            }
+            hm.put(i,k);
+            //kth whitelist e already taken so go k-1
+            k--;
+        }
+        
+        Random r= new Random();
+        int e=r.nextInt(wls);
+        e=hm.get(e)==null?e:hm.get(e);
+        return e;
+    }
+}
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution obj = new Solution(n, blacklist);
+ * int param_1 = obj.pick();
+ */

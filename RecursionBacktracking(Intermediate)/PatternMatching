@@ -1,0 +1,95 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    //"unique" string is used to "print answer" in correct format.
+	public static void solution(String str, String pattern, HashMap<Character,String> map, int idx,String unique){
+		
+		//base case
+		if(idx==pattern.length())
+		{
+          if(str.length()!=0){
+			  return;
+		  }  
+
+		  for(int i=0;i<unique.length();i++){
+			  char ch=unique.charAt(i);
+			  System.out.print(ch+" -> "+map.get(ch)+", ");
+		  }
+
+		  System.out.println(".");
+		}//end of base
+
+        //if main word is finished but pattern is not finished then return
+		if(str.length()==0)
+		 return;
+		
+
+		//get particular char of pattern
+		char ch=pattern.charAt(idx);
+        //if char exists in map then u don't have option,  just check if pattern is there(if !there-> return) and move on
+        if(map.containsKey(ch)){
+		  String pstr=map.get(ch);//previous mapping
+		  int lenpstr=pstr.length();
+          
+		  //check if pattern exists in str (subsequence from 0th index of str i.e 
+		  //i] str="gotia" pstr="g"      Valid 
+		  //ii]str="gotia" pstr="otia"   Not valid 
+		  //iii]str="gotia" pstr="got"   Valid 
+		  //iv]str="gotia" pstr="gotiam" Not valid  )
+		  if(!checkStrMatch2(str,pstr)){//or checkStrMatch2(str,pstr)
+            return;
+		  }
+
+		  String rstr=str.substring(lenpstr);//rest of string after excluding previousmapping i.e pstr
+		  solution(rstr,pattern,map,idx+1,unique);
+		  
+		}else{//if char doesn't exist in map
+           //adding 0th index is a must(should be sequence from start)
+		   for(int i=1;i<=str.length();i++){//IP:-- /IP:-- 1 to len , with len included as we need to include last char also
+			//backtracking takes place here
+			String left=str.substring(0,i);
+			String right=str.substring(i);
+            map.put(ch,left);
+		    solution(right,pattern,map,idx+1,unique+ch);
+			map.remove(ch);
+		   }
+		   
+		}
+		
+		return;
+		
+	}
+
+	static boolean checkStrMatch(String str,String pstr){
+		//check string length for both: if main string is less than pattern then return false
+		if(str.length()<pstr.length())
+		 return false;
+		
+		int len=pstr.length();
+        //check each char of pattern if it is availabe in str
+		for(int i=0;i<len;i++){
+			if(pstr.charAt(i)!=str.charAt(i)) return false;
+		}
+
+		return true;
+	}
+
+	static boolean checkStrMatch2(String str,String pstr){
+		//check string length for both: if main string is less than pattern then return false
+		if(str.length()<pstr.length())
+		 return false;
+		
+		int len=pstr.length();
+
+		return str.substring(0,len).equals(pstr);
+	}
+
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		String str = scn.next();
+		String pattern = scn.next();
+		HashMap<Character,String> map = new HashMap<>();
+		solution(str,pattern,map,0,"");
+	}
+}

@@ -1,0 +1,26 @@
+class Solution {
+    public int leastBricks(List<List<Integer>> wall) {
+        HashMap<Integer,Integer>hm= new HashMap<>();
+        // int csp=0;
+        int h=wall.size();
+        
+        for(List<Integer>r:wall){
+            
+            int width=r.size();
+            int csp=0;
+            
+            for(int i=0;i<=width-2;i++){
+                csp+=r.get(i);
+                hm.put(csp,hm.getOrDefault(csp,0)+1);
+            }
+        }
+        // System.out.println(hm+" "+h);
+        int maxSpace=0;//put 0 and not Integer.MIN_VALUE because if [[1],[1],[1]]: then hm is empty as there is single wall
+        Set<Integer>spacesCount=hm.keySet();
+        for(int e:spacesCount){
+            maxSpace=Math.max(hm.get(e),maxSpace);
+        }
+        
+        return h-maxSpace;
+    }
+}

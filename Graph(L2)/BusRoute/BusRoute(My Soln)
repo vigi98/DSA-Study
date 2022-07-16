@@ -1,0 +1,60 @@
+class Solution {
+    public int numBusesToDestination(int[][] routes, int source, int target) {
+        
+        int n=routes.length;
+        
+        HashMap<Integer,ArrayList<Integer>>hm= new HashMap<>();
+        //Visited AL
+        boolean[]busVis=new boolean[n];
+        HashSet<Integer>hs= new HashSet<>();
+        //Queue
+        Queue<Integer>q= new ArrayDeque<>();
+        
+        //Add buses to busStops
+        for(int i=0;i<n;i++){
+            int m=routes[i].length;
+            for(int j=0;j<m;j++){
+                int busStop=routes[i][j];
+                if(!hm.containsKey(busStop))
+                    hm.put(busStop,new ArrayList<>());
+                hm.get(busStop).add(i);
+            }
+        }//outer for
+        // for(int e:hm.keySet())
+        //     System.out.println(e+""+hm.get(e));
+        
+       q.add(source);
+       int level=0;
+        
+        //Queue task
+        while(q.size()!=0){
+            int size=q.size();
+            
+            //explore the level
+            while(size-->0){
+                //rc*ma*
+                int busStop=q.remove();
+                if(hs.contains(busStop))
+                    continue;
+                if(busStop==target)
+                    return level;   
+                hs.add(busStop);
+                //get the neighbors
+                //
+                for(int bus:hm.get(busStop)){
+                    if(busVis[bus]==true) 
+                        continue;
+                    busVis[bus]=true;
+                    //add un-visited stops
+                    for(int s:routes[bus]){
+                        if(!hs.contains(s))
+                            q.add(s);
+                     }
+                }//end of for
+            }//end of level
+            level++;
+        }//q is empty now
+        
+        return -1;
+    }
+}

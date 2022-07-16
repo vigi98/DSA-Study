@@ -1,0 +1,103 @@
+class Solution {
+    
+    private class Pair{
+        int x,y,t;
+        Pair(int x,int y,int t){
+            this.x=x;
+            this.y=y;
+            this.t=t;
+        }
+    }
+    
+    int [][]dirs={{1,0},{-1,0},{0,1},{0,-1}};
+    
+    public int orangesRotting(int[][] grid) {
+        //BFS
+        Queue<Pair>q= new ArrayDeque<>();
+        int n=grid.length,m=grid[0].length;
+        //count: to count total Valid oranges.Used to check if all are rotten or some are not rotten
+        int totalT=0,fresh=0;
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                //adding rotten tomatoes in queue
+                if(grid[i][j]==2)
+                    q.add(new Pair(i,j,0));
+                //count total fresh i.e 1. This will be used to check if to  print -1 or totalTime
+                if(grid[i][j]==1)
+                    fresh++;
+            }
+        }
+
+        if(fresh==0)//No fresh available.
+         return 0;
+        
+        
+        while(q.size()!=0){
+            Pair top=q.remove();
+            
+            for(int i=0;i<dirs.length;i++){
+                int rdash=top.x+dirs[i][0];
+                int cdash=top.y+dirs[i][1];
+                if(rdash>=0 && cdash>=0 && rdash<n && cdash<m && grid[rdash][cdash]==1){
+                    //mark as rotten
+                    grid[rdash][cdash]=2;
+                    //increment time
+                    int time=top.t+1;
+                    q.add(new Pair(rdash,cdash,time));
+                    //No of fresh oranges reduced
+                    fresh--;
+                    if(time>totalT)
+                        totalT=time;
+                }
+                
+            }
+        }
+        
+        
+        return fresh==0?totalT:-1;
+    }
+
+     public int orangesRotting2(int[][] grid) {
+        //BFS
+        Queue<Pair>q= new ArrayDeque<>();
+        int n=grid.length,m=grid[0].length;
+        //count: to count total Valid oranges.Used to check if all are rotten or some are not rotten
+        int totalT=-1,count=0;
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                //adding rotten tomatoes in queue
+                if(grid[i][j]==2)
+                    q.add(new Pair(i,j));
+                if(grid[i][j]==1)
+                    count++;
+            }
+        }
+        
+        if(count==0)
+            return 0;
+        
+         while(q.size()!=0){
+             int size=q.size();
+             totalT++;
+             while(size--!=0){
+             Pair top=q.remove();
+            
+             for(int i=0;i<dirs.length;i++){
+                int rdash=top.x+dirs[i][0];
+                int cdash=top.y+dirs[i][1];
+                if(rdash>=0 && cdash>=0 && rdash<n && cdash<m && grid[rdash][cdash]==1){
+                    //mark as rotten
+                    grid[rdash][cdash]=2;                 
+                    q.add(new Pair(rdash,cdash));
+                    count--;
+                  }  
+                }
+              }
+            
+        }
+        
+        return count==0?totalT:-1;
+    }
+}

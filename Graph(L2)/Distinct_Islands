@@ -1,0 +1,81 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class Main {
+
+  public static void main(String[] args) throws NumberFormatException, IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+ String st[]=br.readLine().split(" ");
+    int n = Integer.parseInt(st[0]);
+    int m = Integer.parseInt(st[1]);
+
+    int[][] arr = new int[n][m];
+
+    for (int i = 0; i < n; i++) {
+      st = br.readLine().split(" ");
+      for (int j = 0; j < m; j++) {
+        arr[i][j] = Integer.parseInt(st[j]);
+      }
+    }
+
+    System.out.println(numDistinctIslands(arr));
+
+  }
+
+  public static StringBuilder psf = new StringBuilder();
+
+  public static int numDistinctIslands(int[][] arr) {
+    HashSet<String>hs= new HashSet<>();
+
+    int n=arr.length;
+    int m=arr[0].length;
+
+    for(int i=0;i<n;i++){
+      for(int j=0;j<m;j++){
+        if(arr[i][j]==1){
+          psf.append("x");
+          dfs(i,j,n,m,arr);
+          hs.add(psf.toString());
+          psf= new StringBuilder();
+        }
+      }
+    }
+
+    // System.out.println(hs);
+    return hs.size();
+  }
+
+  static void dfs(int r,int c,int n,int m,int[][] arr){
+
+    arr[r][c]=0;
+     
+     //not required
+    // if(r!=0 && arr[r-1][c]==1){
+    //   psf.append("u");
+    //   dfs(r-1,c,n,m,arr);
+    // }
+
+    if(c!=m-1 && arr[r][c+1]==1){
+      psf.append("r");
+      dfs(r,c+1,n,m,arr);
+    }
+
+
+    if(r!=n-1 && arr[r+1][c]==1){
+      psf.append("d");
+      dfs(r+1,c,n,m,arr);
+    }
+
+    if(c!=0 && arr[r][c-1]==1){
+      psf.append("l");
+      dfs(r,c-1,n,m,arr);
+    }
+
+    psf.append("z");
+
+    
+  }
+}

@@ -1,0 +1,38 @@
+import java.util.*;
+
+public class Main {
+
+  public static void main(String[] args) {
+    HashMap<String,Integer>hm= new HashMap<>();
+    //hm.put(key,value)- !exists: adds , exists:update. 
+    hm.put("Vigi",10);
+    hm.put("Ravi",20);
+    hm.put("Geteta",30);
+    hm.put("Priya",40);
+
+    System.out.println(hm);
+    //hm.get(key)--> exists:value, !exists(depends on receiving element): (Wrapper)Integer-null; (Primitive)int-NullPointerException
+    Integer rollNo=hm.get("Ge");
+    System.out.println(rollNo);
+    // int introllNo=hm.get("Ge");
+    // System.out.println(introllNo);
+    
+    //hm.remove(key)-similar to get
+    Integer roll=hm.remove("Ge");//does not exists
+    System.out.println(roll);
+    System.out.println(hm);
+
+    //hm.containsKey(key): true/false
+    System.out.println(hm.containsKey("m"));
+    System.out.println(hm.containsKey("Priya"));
+    //hm.keySet()
+    Set<String> keys=hm.keySet();
+    for(String key:keys){
+      System.out.println(key+":"+hm.get(key));
+    }
+  }
+}
+
+In Ap qn, why there is a need to store in HashSet- as we need to find elements and also array ort is nlogn but we need ans in need
+
+Another 

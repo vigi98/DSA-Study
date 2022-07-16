@@ -1,0 +1,87 @@
+import java.io.*;
+import java.util.*;
+//IP: In main class->sum % k != 0
+public class Main {
+
+   
+	public static void solution(int[] arr, int vidx,int[] subsetSum,int ssf, ArrayList<ArrayList<Integer>> ans) {
+		//n=arr.length
+		if(vidx==arr.length){
+			//k==subsetSum.length
+			if(ssf==subsetSum.length && isSumOk(subsetSum)){
+				
+				for(ArrayList<Integer>c:ans)
+                  System.out.print(c+" ");
+				System.out.println();
+			}
+			
+			return;
+		}
+
+		for(int i=0;i<ans.size();i++){
+           
+		   ArrayList<Integer> cur= ans.get(i);
+
+			if(cur.size()==0){
+				cur.add(arr[vidx]);
+				subsetSum[i]=arr[vidx];
+				solution(arr,vidx+1,subsetSum,ssf+1,ans);
+				subsetSum[i]=0;
+				cur.remove(cur.size()-1);
+				return;
+			}
+
+			    cur.add(arr[vidx]);
+				subsetSum[i]+=arr[vidx];
+				solution(arr,vidx+1,subsetSum,ssf,ans);
+				subsetSum[i]-=arr[vidx];
+				cur.remove(new Integer(arr[vidx]));
+		}
+
+	}
+
+	static boolean isSumOk(int[] subsetSum){
+
+		int s=subsetSum[0];
+		for(int e:subsetSum){
+			if(s!=e) return false;
+		}
+
+		return true;
+	}
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		int n = scn.nextInt();
+		int[] arr = new int[n];
+		int sum = 0;
+		for(int i =  0 ; i < arr.length; i++) {
+			arr[i] = scn.nextInt();
+			sum += arr[i];
+		}
+		int k = scn.nextInt();
+		// if k is equal to 1, then whole array is your answer 
+		if(k == 1) {
+			System.out.print("[");
+			for(int i = 0 ; i  < arr.length; i++) {
+				System.out.print(arr[i] + ", ");
+			}
+			System.out.println("]");
+			return;
+		}
+		//if there are more subsets than no. of elements in array or sum of all elements is not divisible by k
+		//now if sum=21 then to divide it into 3 sets then each set should contain 7.Now 3 sets wwith sum =7 then total-sum=3*7=21
+		if(k > n || sum % k != 0) {
+			System.out.println("-1");
+			return;
+		}
+		int[] subsetSum = new int[k];
+		ArrayList<ArrayList<Integer>> ans = new ArrayList<>();
+		for(int i = 0; i < k; i++) {
+			ans.add(new ArrayList<>());
+		}
+		solution(arr,0,subsetSum,0,ans);
+	}
+	
+	
+
+}

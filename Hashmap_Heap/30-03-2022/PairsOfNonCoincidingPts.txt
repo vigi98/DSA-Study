@@ -1,0 +1,30 @@
+https://practice.geeksforgeeks.org/problems/pairs-of-non-coinciding-points4141/1
+class Solution {
+    
+    static int numOfPairs(int[] X, int[] Y, int N) {
+        HashMap<Integer,Integer>xm = new HashMap<>();
+        HashMap<Integer,Integer>ym = new HashMap<>();
+        HashMap<String,Integer>pm=new HashMap<>();
+        int count=0;
+        
+        for(int i=0;i<N;i++){
+            int x=X[i],y=Y[i];
+            String p=""+x+"*"+y;
+            int xAlreadyExisting=xm.getOrDefault(x,0);
+            int yAlreadyExisting=ym.getOrDefault(y,0);
+            int pAlreadyExisting=pm.getOrDefault(p,0);
+            
+            count+=xAlreadyExisting+yAlreadyExisting;
+            
+            if(pAlreadyExisting!=0){
+                count-=2*pAlreadyExisting;
+            }
+            
+            xm.put(x,xAlreadyExisting+1);
+            ym.put(y,yAlreadyExisting+1);
+            pm.put(p,pAlreadyExisting+1);
+        }
+        // System.out.println(pm);
+        
+        return count;
+    }

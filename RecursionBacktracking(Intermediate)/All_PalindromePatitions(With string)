@@ -1,0 +1,60 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+    
+	//Better
+	public static void solution2(String str, String asf) {
+		
+		if(str.equals("")){
+			System.out.println(asf);
+			return;
+		}
+		
+		for(int i=0;i<str.length();i++){
+
+			if(isPalindrome(0,i,str)){
+				String prefix=str.substring(0,i+1);
+				String ros=str.substring(i+1);
+				solution(ros,asf+"("+prefix+") ");
+			}
+		}
+		
+	}
+    
+	public static void solution1(int i,int st,int end,String str, String asf) {
+	   
+	   if(i==str.length()){
+		   if(isPalindrome(st,end,str))
+		    System.out.println(asf+")");
+		   
+		   return;
+	   }
+
+	   char ch=str.charAt(i);
+
+	   //new
+	   if(isPalindrome(st,end,str)){
+        solution(i+1,i,i,str,asf+") "+"("+ch);
+	   }
+	   //old-last-merge
+	   solution(i+1,st,i,str,asf+ch);
+	}
+
+	static boolean isPalindrome(int s,int e,String str){
+		int f=s,l=e;
+		while(f<l){
+            if(str.charAt(f)!=str.charAt(l)) return false;
+			f++;
+			l--;
+		}
+		return true;
+	}
+	public static void main(String[] args) {
+		Scanner scn = new Scanner(System.in);
+		String str = scn.nextLine();
+		solution1(1,0,0,str, "("+str.charAt(0));
+		solution2(str, "");
+	}
+
+}
