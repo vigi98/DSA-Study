@@ -1,0 +1,75 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {//TC=O(V+ElogV) SC=O(E+V)
+
+static class Pair implements Comparable<Pair>{
+int vtx,cost;
+Pair(int v,int c){
+    vtx=v;
+    cost=c;
+}
+
+public int compareTo(Pair o){
+    return this.cost-o.cost;
+}
+
+}
+
+public static void main(String[] args) throws NumberFormatException, IOException {
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+String[] st = br.readLine().split(" ");
+int n = Integer.parseInt(st[0]);
+int m = Integer.parseInt(st[1]);
+
+HashMap<Integer,ArrayList<Pair>>adj= new HashMap<>();
+
+for(int i=1;i<=n;i++){
+    adj.put(i,new ArrayList<>());
+}
+
+for(int i=0;i<m;i++){
+ String []p=br.readLine().split(" ");
+ int u=Integer.parseInt(p[0]);
+ int v=Integer.parseInt(p[1]);
+
+ adj.get(u).add(new Pair(v,0));
+ adj.get(v).add(new Pair(u,1));
+
+}
+
+System.out.println(dijkstra(n,adj));
+
+}
+
+static int dijkstra(int n,HashMap<Integer,ArrayList<Pair>>adj){
+
+ boolean[]vis= new boolean[n+1];
+ PriorityQueue<Pair>pq= new PriorityQueue<>();
+
+ pq.add(new Pair(1,0));
+ //rc*m(w)a*
+ while(pq.size()!=0){
+    Pair top=pq.remove();
+
+    if(top.vtx==n){
+      return top.cost;
+    }
+
+    if(vis[top.vtx])
+      continue;
+
+    vis[top.vtx]=true;
+
+    for(Pair p:adj.get(top.vtx)){
+        if(!vis[p.vtx]){
+         int totalCostToReachPVtx=top.cost+p.cost;
+         pq.add(new Pair(p.vtx,totalCostToReachPVtx));
+        }
+    }
+ }
+
+ return -1;
+}
+
+}

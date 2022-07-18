@@ -1,0 +1,141 @@
+
+//My Method: Using Hashmap as graph
+import java.io.*;
+import java.util.*;
+
+public class Main {//TC=O(V+E) SC=O(E+V)
+
+
+public static void main(String[] args) throws NumberFormatException, IOException {
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+String[] st = br.readLine().split(" ");
+int n = Integer.parseInt(st[0]);
+int m = Integer.parseInt(st[1]);
+
+HashMap<Integer,ArrayList<Pair>>adj= new HashMap<>();
+
+for(int i=1;i<=n;i++){
+    adj.put(i,new ArrayList<>());
+}
+
+for(int i=0;i<m;i++){
+ String []p=br.readLine().split(" ");
+ int u=Integer.parseInt(p[0]);
+ int v=Integer.parseInt(p[1]);
+
+ adj.get(u).add(new Pair(v,0));
+ adj.get(v).add(new Pair(u,1));
+
+}
+// System.out.println(adj);
+System.out.println(Bfs01(n,adj));
+
+}
+
+static class Pair {
+int vtx,cost;
+Pair(int v,int c){
+    vtx=v;
+    cost=c;
+}
+
+}
+
+static int Bfs01(int n,HashMap<Integer,ArrayList<Pair>>adj){
+
+    boolean []vis= new boolean[n+1];
+    LinkedList<Pair>ll= new LinkedList<>();
+    ll.addLast(new Pair(1,0));
+
+    while(ll.size()!=0){
+        Pair top=ll.removeFirst();
+
+        if(top.vtx==n)
+         return top.cost;
+        
+        if(vis[top.vtx])
+         continue;
+
+        vis[top.vtx]=true;
+        
+        for(Pair edg:adj.get(top.vtx)){
+            if(!vis[edg.vtx]){
+                // int csf=top.cost+edg.cost;//cost to reach top + cost of edge btw vtx->nbr
+               
+                if(edg.cost==0)
+                 ll.addFirst(new Pair(edg.vtx,top.cost));
+                else
+                 ll.addLast(new Pair(edg.vtx,top.cost+1));
+            }
+        }
+    }
+
+    return -1;
+}
+
+}
+
+//Subhash Sir Method: Using ArrayList<> as map. 
+
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+public static void main(String[] args) throws NumberFormatException, IOException {
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+String[] st = br.readLine().split(" ");
+int n = Integer.parseInt(st[0]);
+int m = Integer.parseInt(st[1]);
+
+ArrayList<ArrayList<Pair>> graph = new ArrayList<>();
+
+for (int i = 0; i < n; i++) {
+graph.add(new ArrayList<>());
+}
+
+for (int i = 0; i < m; i++) {
+st = br.readLine().split(" ");
+int u = Integer.parseInt(st[0]) - 1;
+int v = Integer.parseInt(st[1]) - 1;
+graph.get(u).add(new Pair(v, 0));
+graph.get(v).add(new Pair(u, 1));
+}
+
+LinkedList<Pair> queue = new LinkedList<>();
+boolean[] vis = new boolean[n];
+queue.addLast(new Pair(0, 0));
+
+while (queue.size() > 0) {
+Pair rem = queue.removeFirst();
+
+if (rem.vtx == n - 1) {
+System.out.println(rem.wt);
+return;
+}
+
+vis[rem.vtx] = true;
+
+for (Pair nbrs : graph.get(rem.vtx)) {
+if (vis[nbrs.vtx] == true) {
+continue;
+}
+
+if (nbrs.wt == 0) {
+queue.addFirst(new Pair(nbrs.vtx, rem.wt));
+} else {
+queue.addLast(new Pair(nbrs.vtx, rem.wt + 1));
+}
+}
+}
+System.out.println(-1);
+}
+public static class Pair{
+   int vtx;
+   int wt;
+   Pair(int vtx,int wt){
+       this.vtx=vtx;
+       this.wt=wt;
+   }
+}
+}

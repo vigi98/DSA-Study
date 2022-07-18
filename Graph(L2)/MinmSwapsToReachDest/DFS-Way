@@ -1,0 +1,66 @@
+import java.io.*;
+import java.util.*;
+
+public class Main {
+
+static HashMap<Integer,ArrayList<Integer>>srcs;
+static HashMap<Integer,ArrayList<Integer>>dests;
+static int ans;
+
+public static void main(String[] args) throws NumberFormatException, IOException {
+BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+Scanner in= new Scanner(System.in);
+String[] st = br.readLine().split(" ");
+int n = Integer.parseInt(st[0]);
+int m = Integer.parseInt(st[1]);
+
+srcs= new HashMap<>();
+dests= new HashMap<>();
+ans=Integer.MAX_VALUE;
+
+ for(int i=1;i<=n;i++)//If this is not done then we have to check in dfs if the key exists or not ,as there might be a case that a vertex is never used
+  {
+      srcs.put(i,new ArrayList<>());
+      dests.put(i,new ArrayList<>());
+  }
+
+for(int i=0;i<m;i++){
+    String[] edg = br.readLine().split(" ");
+    int u = Integer.parseInt(edg[0]);
+    int v = Integer.parseInt(edg[1]);
+    srcs.get(v).add(u);
+    dests.get(u).add(v);
+}
+
+boolean[]vis= new boolean[n+1];//1->n(as 0 does not exists) so n+1
+
+dfs(1,n,0,vis);
+
+System.out.println(ans==Integer.MAX_VALUE?-1:ans);
+}
+
+static void dfs(int curN,int targ,int swaps,boolean[]vis){
+
+  if(curN==targ){
+      ans=ans>swaps?swaps:ans;//minm swap can be "0" and if there does not exists a path from src->dest[disconnected graph] then "-1".
+      return;
+  }
+   
+  vis[curN]=true;
+
+//   if(dests.containsKey(curN))//
+    for(int dNbr: dests.get(curN)){//Go to each of its' target node
+      if(!vis[dNbr])
+       dfs(dNbr,targ,swaps,vis);
+    }
+  
+//   if(srcs.containsKey(curN))//Go to each of its' src node
+    for(int srcNbr:srcs.get(curN)){
+       if(!vis[srcNbr])
+         dfs(srcNbr,targ,swaps+1,vis);
+    }
+
+  
+  vis[curN]=false;
+}
+}

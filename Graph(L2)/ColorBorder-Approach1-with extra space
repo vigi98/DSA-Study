@@ -35,7 +35,7 @@ class Solution {
     int [][]dir={{1,0},{0,1},{-1,0},{0,-1}};
     private boolean markBorder(int r,int c,int origColor,int[][]grid,ArrayList<Border>borderList){
         
-        if(r<0||c<0||r>=grid.length||c>=grid[0].length)//is out of bound or already visited
+        if(r<0||c<0||r>=grid.length||c>=grid[0].length||Math.abs(grid[r][c])!=origColor)//is out of bound or is!=orig (grid[r][c]!=origColor && grid[r][c]!=-1*origColor)
         {
             return false;//is not part of component[but node calling this is Border material]
         }
@@ -43,8 +43,6 @@ class Solution {
         if(grid[r][c]==-1*origColor)//is visited already
             return true;//true as it is part of component
         
-        if(grid[r][c]!=origColor && grid[r][c]!=-1*origColor)//if node is not visited and also is not equal to compoNent color
-            return false;
         
         boolean isBorder=false;
         grid[r][c]=-1*origColor;
