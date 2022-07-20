@@ -1,0 +1,31 @@
+class Solution {//TC->O(n) SC-> O(n)
+//Input: nums = [100,4,200,1,3,2]
+// Output: 4
+// Explanation: The longest consecutive elements sequence is [1, 2, 3, 4]. Therefore its length is 4.
+    public int longestConsecutive(int[] nums) {
+        HashSet<Integer>numSet= new HashSet<>();
+        int longestStreak=0;
+        
+        for(int e:nums)
+            numSet.add(e);
+        
+        for(int e:nums){
+            //finding the top-parent i.e if there are elem: 2,4,1,3 
+            //then we check for sequence from 1 and not rest as at 3 ->2 exists for 2->1 exists. 
+            //Reason :if suppose suppose 3 we have to check for 3+1=4 & 3-1=2. But at top-parent i.e 1 there is no 1-1=0 hence we move by +1 to check total streak i.e. 1,2,3,4. Hence at start we check if e-1 exists to get top-parent
+            if(!numSet.contains(e-1)){
+                
+                int currentNum=e;
+                int streak=1;
+                while(numSet.contains(currentNum+1)){
+                    currentNum+=1;//this is used to move to next elem
+                    streak++;                    
+                }
+                
+                longestStreak=Math.max(longestStreak,streak);
+            }
+        }
+        
+        return longestStreak;
+    }
+}

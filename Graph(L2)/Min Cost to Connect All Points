@@ -1,0 +1,88 @@
+class Solution {
+    
+//     private class SortComparator implements Comparator<Edge>{
+        
+//         public int compare(Edge n1, Edge n2){
+//             return n1.wt-n2.wt;
+//         }
+//     }
+    
+    private class Edge {
+        int u,v,wt;
+        Edge(int u,int v,int wt){
+            this.u=u;
+            this.v=v;
+            this.wt=wt;
+        }
+        
+    }
+    
+    private int[]parent,rank;
+    private boolean union(int u,int v){
+      int pu=findP(u);// 
+    int pv=findP(v);
+
+    if(pu==pv) return false;
+
+    if(rank[pu]>rank[pv])
+      parent[pv]=pu;
+    else if(rank[pu]<rank[pv])
+      parent[pu]=pv;
+    else{
+      parent[pv]=pu;
+      rank[pu]++;
+    }
+        
+        return true;
+        
+    }
+    
+    private int findP(int node){
+        if(parent[node]==node)
+            return node;
+        return parent[node]=findP(parent[node]);
+    }
+    
+     private int Kruskal(int n,ArrayList<Edge>al){
+       
+        Collections.sort(al,(a,b)->a.wt-b.wt);
+        int count=0;
+        int minCost=0;
+        parent=new int[n];
+        rank= new int[n];
+        
+        for(int i=0;i<n;i++)
+            parent[i]=i;
+        
+        for(Edge edg:al){
+            if(count==n-1)
+                break;
+            int u=edg.u;
+            int v=edg.v;
+        
+            if(union(u,v)){
+              count++;
+              minCost+=edg.wt;
+            }
+        }
+        
+        return count==n-1?minCost:0;
+    }
+    
+    
+    public int minCostConnectPoints(int[][] points) {
+        ArrayList<Edge>al= new ArrayList<>();
+        int n=points.length;
+        for(int i=0;i<n;i++){
+            for(int j=i+1;j<n;j++){
+                int edgeCost=Math.abs(points[i][0]-points[j][0])+Math.abs(points[i][1]-points[j][1]);
+                al.add(new Edge(i,j,edgeCost));
+            }
+        }
+        
+        return Kruskal(n,al);       
+        
+    }
+    
+   
+}

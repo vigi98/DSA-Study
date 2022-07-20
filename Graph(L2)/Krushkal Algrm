@@ -1,0 +1,115 @@
+import java.util.*;
+import java.io.*;
+
+public class Main {//TC-> max E=V*V-1=V^2//sorting and then loop which uses DSU->O(ElogE +E ->ElogV^2->2ElogV->ElogV)->O(ElogV+E)
+                   //SC-> O(V+V+E)->O(V+E). E-> adacency matrix V-> parent and rank
+
+  public static void main(String[] args) throws Exception {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+    int v = Integer.parseInt(br.readLine());
+    int e = Integer.parseInt(br.readLine());
+
+    int[][] edges = new int[e][3];
+    for (int i = 0; i < e; i++) {
+      String[] st = br.readLine().split(" ");
+      edges[i][0] = Integer.parseInt(st[0]);
+      edges[i][1] = Integer.parseInt(st[1]);
+      edges[i][2] = Integer.parseInt(st[2]);
+    }
+
+    System.out.println(minCostToSupplyWater(v, edges));
+  }
+
+  static int[] parent;
+  static int[] rank;
+  
+
+  public static class Edges implements Comparable<Edges> {
+    private int u,v,wt;;
+    
+    Edges(int u, int v, int wt) {
+      this.u = u;
+      this.v = v;
+      this.wt = wt;
+    }
+
+    int getU(){
+     return this.u;
+    }
+    int getV(){
+        return this.v;
+    }
+    int getWeight(){
+        return this.wt;
+    }
+
+    @Override
+    public int compareTo(Edges o) {
+      return this.getWeight() - o.getWeight();
+    }
+  }
+
+//we can directly send disjoint parent nodes , then first 3 lines in the fn is not needed
+  private static void union(int u,int v){
+    int pu=findP(u);// 
+    int pv=findP(v);
+
+    if(pu==pv) return;
+
+    if(rank[pu]>rank[pv])
+      parent[pv]=pu;
+    else if(rank[pu]<rank[pv])
+      parent[pu]=pv;
+    else{
+      parent[pv]=pu;
+      rank[pu]++;
+    }
+  }
+
+  private static int findP(int node){
+    if(parent[node]==node)
+     return node;
+    
+    return parent[node]=findP(parent[node]);
+  }
+
+  public static int minCostToSupplyWater(int n, int[][] pipes) {
+
+   //Add all edges
+   ArrayList<Edges>adj= new ArrayList<>();
+   for(int []arr:pipes){
+     adj.add(new Edges(arr[0],arr[1],arr[2]));
+   }
+
+   return KruskalAlgo(n,adj);
+  }
+
+  private static int KruskalAlgo(int n,ArrayList<Edges>adj){
+
+   Collections.sort(adj);//sort the edges set in ascending order of wts
+   parent=new int[n];
+   rank=new int[n];
+   for(int i=0;i<n;i++){
+    parent[i]=i;
+   }
+
+   int countEdges=0,cost=0;
+   
+   for(Edges edg: adj){
+
+     if(countEdges==n-1)//if n-1 edges taken, ans found: break
+       break;
+     int u=edg.getU();
+     int v=edg.getV();
+
+     if(findP(u)==findP(v))//check for cycle btw edges by checking if they below to same grp by checking if they have same parent
+       continue;
+     
+     union(u,v);//join the 2 disjoint sets as both pts are now joint
+     countEdges++;
+     cost+=edg.getWeight();
+   }
+
+   return countEdges!=n-1?0:cost;
+  }
+}
