@@ -1,0 +1,27 @@
+class Solution {//TargetSum with recursion and memorization
+    private int total;
+    public int findTargetSumWays(int[] nums, int target) {
+        total=Arrays.stream(nums).sum();//sum of all elem in arr
+        int[][]dp= new int[nums.length][2*total+1];
+        for(int[]row:dp)
+            Arrays.fill(row,Integer.MIN_VALUE);
+        
+        return calculate(target,0,0,nums,dp);
+    }
+    
+    private int calculate(int S,int i,int sum,int[]nums,int[][]dp){
+        if(i==nums.length){
+            return (sum==S)?1:0;
+        }
+        
+        if(dp[i][sum+total]!=Integer.MIN_VALUE)
+            return dp[i][sum+total];//it is total and not targ. IP remeber 
+        
+        int add=calculate(S,i+1,sum+nums[i],nums,dp);
+        int sub=calculate(S,i+1,sum-nums[i],nums,dp);
+        dp[i][sum+total]=add+sub;
+        
+        return dp[i][sum+total];
+    }
+}
+
