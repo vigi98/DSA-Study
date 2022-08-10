@@ -1,4 +1,50 @@
-S1// HashMap O(n^2 * mlogm)  SC->O(n)+O(m) ;m=3
+M-2: Optimized -2-pointer. TC-> O(n*n) SC-> O(M) M: assuming we have 'm' triplets
+
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        int n=nums.length;
+        List<List<Integer>> res= new ArrayList<>();
+        
+        for(int i=0;i<=n-3;i++){
+            
+            if(i==0||nums[i]!=nums[i-1]){
+                int lo=i+1,hi=n-1;
+                
+                 while(lo<hi){
+                   int req_sum=0-nums[i];
+                     
+                     if(nums[lo]+nums[hi]==req_sum){
+                         
+                        res.add(Arrays.asList(nums[i],nums[lo],nums[hi]));//in increasing order added as nums-array is sorted earlier
+                        
+                         //incr lo and hi. Both lo and hi will come to last duplicate.
+                         while(lo<hi && nums[lo]==nums[lo+1])lo++;
+                         while(lo<hi && nums[hi]==nums[hi-1])hi--;
+                         
+                         //we go to next elem which is not duplicate
+                         lo++;hi--;    
+                     }
+                   
+                     else if(nums[lo]+nums[hi]<req_sum) lo++;
+                     
+                     else hi--;
+                   
+                 }
+            }
+            
+            // else{ NOT REquired as we are inside for-loop so i will increase
+            //     i++;
+            // }
+           
+        }//end of for
+        
+        return res;
+    }
+}
+
+
+M-1// HashMap O(n^2 * mlogm)  SC->O(n)+O(m) ;M: assuming we have 'm' triplets
 class Solution {
     public List<List<Integer>> threeSum(int[] nums) {
         int n=nums.length;
