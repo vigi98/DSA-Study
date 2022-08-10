@@ -1,0 +1,44 @@
+S1// HashMap O(n^2 * mlogm)  SC->O(n)+O(m) ;m=3
+class Solution {
+    public List<List<Integer>> threeSum(int[] nums) {
+        int n=nums.length;
+        List<Integer>l;
+        List<List<Integer>>ans= new ArrayList<>();
+        
+        HashMap<Integer,Integer>hm= new HashMap<>();
+        HashSet<List<Integer>>hs= new HashSet<>();
+        
+        for(int e:nums){
+            hm.put(e,hm.getOrDefault(e,0)+1);
+        }
+        System.out.println(hm);
+        for(int i=0;i<n;i++){
+            int a=nums[i];
+            hm.put(a,hm.get(a)-1);
+            for(int j=i+1;j<n;j++){
+                int b=nums[j];
+                hm.put(b,hm.get(b)-1);//Used to prevent current b element from being used & not from duplicacy as we are backtracking the statement after operation i.e (a,b,b)X not allowed should be (a,b,c)though a,b,c can be equal values. 
+                
+                int c=-(a+b);
+                if(hm.containsKey(c)&&hm.get(c)!=0){
+                    l=new ArrayList<>();
+                    l.add(a);
+                    l.add(b);
+                    l.add(c);
+                    Collections.sort(l);//sorting so that hashset can identify duplicates i.e. (0,-1,1), (-1,1,0),(1,0,-1) --> hashet will treat all as diff elements and not same.Hence we get duplicate answers. So sort req.
+                    hs.add(l);
+                }
+                
+                hm.put(b,hm.get(b)+1);//backtrack
+                
+            }
+            // hm.put(a,hm.get(a)+1); a will no longer be used so not backtracking it
+        }
+        System.out.println(hs);
+        for(List<Integer>e:hs)
+            ans.add(e);
+        
+        return ans;
+        
+    }
+}

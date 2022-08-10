@@ -1,0 +1,113 @@
+2 ways:
+
+//1- similar to palindome approach
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+//1-Way
+class Solution {
+    
+    private ListNode t;
+    public void reorderList(ListNode head) {
+        if(head.next==null)return;
+        t=head;
+        reorder(head);
+        t.next=null;
+    }
+    
+    private void reorder(ListNode cur){
+        if(cur==null)return;
+        
+        reorder(cur.next);
+        
+        //end of re-order: when temp.next is pointing itself
+        if(t.next==t)return;
+        
+        //Odd sequence: at the end : to make pt itself at end.
+        if(t==cur){
+            t.next=t;
+            return;
+        }
+        
+        //For even sequence it will pt itself automatically.So not req as earlier.
+        
+        //General
+        ListNode next=t.next;
+        t.next=cur;
+        cur.next=next;
+        t=next;
+    }
+}
+
+//2: Mid of LL(sl and fast ptr) approach & Merge 2 LL approach
+
+/**
+ * Definition for singly-linked list.
+ * public class ListNode {
+ *     int val;
+ *     ListNode next;
+ *     ListNode() {}
+ *     ListNode(int val) { this.val = val; }
+ *     ListNode(int val, ListNode next) { this.val = val; this.next = next; }
+ * }
+ */
+class Solution {
+    
+    private ListNode midLL(ListNode h){
+        ListNode sp=h,fp=h.next;
+        while(fp!=null && fp.next!=null){
+            sp=sp.next;
+            fp=fp.next.next;
+        }
+        
+        return sp;
+    }
+    
+    private ListNode reverse(ListNode h){
+        ListNode prev=null,cur=h;
+        while(cur!=null){
+            ListNode next=cur.next;
+            cur.next=prev;
+            prev=cur;
+            cur=next;
+        }
+        
+        return prev;
+    }
+    
+    private void mergeTwoLL(ListNode h1,ListNode h2){
+           
+        while(h1!=null && h2!=null){
+            ListNode t1=h1.next,t2=h2.next;
+            h1.next=h2;
+            h2.next=t1;
+            h1=t1;
+            h2=t2;
+        }
+            
+    }
+    
+    public void reorderList(ListNode head) { 
+        
+        if(head==null||head.next==null)return;
+        
+        ListNode midNode=midLL(head);
+        
+        ListNode sh=midNode.next;
+        midNode.next=null;
+        
+        ListNode rsh=reverse(sh);
+        
+        mergeTwoLL(head,rsh);
+    }
+    
+  
+}
+
