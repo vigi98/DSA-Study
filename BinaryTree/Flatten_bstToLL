@@ -1,0 +1,40 @@
+
+//Flatten Binary Tree to LL(Using PreOrder)
+
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public void flatten(TreeNode root) {
+        if(root==null)return;
+        
+        if(root.left==null && root.right==null)return;
+        
+        flatten(root.left);
+        flatten(root.right);
+        
+        if(root.left==null)return;
+        
+        TreeNode l=root.left,r=root.right;
+        
+        root.left=null;
+        root.right=null;
+        root.right=l;//IP
+        
+        while(l.right!=null)l=l.right;//So that, we can get last node of: left-flatten, so as to connect with top of right-flatten
+        
+        l.right=r;
+    }
+}
