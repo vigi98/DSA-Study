@@ -1,0 +1,105 @@
+import java.util.*;
+
+public class Main {
+    public static Scanner scn = new Scanner(System.in);
+
+    public static class TreeNode {
+        int val = 0;
+        TreeNode left = null;
+        TreeNode right = null;
+
+        TreeNode(int val) {
+            this.val = val;
+        }
+    }
+
+    static class Pair{
+        TreeNode node;
+        int vt;
+        Pair(TreeNode n,int v){
+            node=n;
+            vt=v;
+        }
+    }
+
+    public static ArrayList<ArrayList<Integer>> verticalOrderTraversal(TreeNode root) {
+        
+        ArrayList<ArrayList<Integer>>ans= new ArrayList<>();
+
+        if(root==null)return ans;
+
+        int widthL=Integer.MAX_VALUE,widthR=Integer.MIN_VALUE;
+        Queue<Pair>q= new ArrayDeque<>();
+        HashMap<Integer,ArrayList<Integer>>hm= new HashMap<>();
+
+        q.add(new Pair(root,0));
+        
+        while(q.size()!=0){
+
+            Pair top=q.remove();
+            int vt=top.vt;
+            TreeNode node=top.node;
+
+            widthL=Math.min(widthL,vt);
+            widthR=Math.max(widthR,vt);
+
+            hm.putIfAbsent(vt,new ArrayList());            
+            hm.get(vt).add(node.val);
+
+            if(node.left!=null)
+              q.add(new Pair(node.left,vt-1));
+
+            if(node.right!=null)
+              q.add(new Pair(node.right,vt+1));
+            
+        }
+
+        // System.out.println(hm);
+        // int hashSize=hm.size();
+        // maxLeftWidth=Math.abs(maxLeftWidth);
+        
+        while(widthL<=widthR){
+            ans.add(hm.get(widthL));
+            widthL++;
+        }
+        return ans;
+    
+    }
+
+    // input_section=================================================
+
+    public static TreeNode createTree(int[] arr, int[] IDX) {
+        if (IDX[0] > arr.length || arr[IDX[0]] == -1) {
+            IDX[0]++;
+            return null;
+        }
+        TreeNode node = new TreeNode(arr[IDX[0]++]);
+        node.left = createTree(arr, IDX);
+        node.right = createTree(arr, IDX);
+
+        return node;
+    }
+
+    public static void solve() {
+        int n = scn.nextInt();
+        int[] arr = new int[n];
+        for (int i = 0; i < n; i++)
+            arr[i] = scn.nextInt();
+
+        int[] IDX = new int[1];
+        TreeNode root = createTree(arr, IDX);
+
+        ArrayList<ArrayList<Integer>> ans = verticalOrderTraversal(root);
+        int idx = 0;
+        for (ArrayList<Integer> i : ans) {
+            System.out.print(idx++ + " -> ");
+            for (Integer j : i)
+                System.out.print(j + " ");
+            System.out.println();
+        }
+    }
+
+    public static void main(String[] args) {
+        solve();
+    }
+}

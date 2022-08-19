@@ -1,0 +1,42 @@
+class Solution {
+    private int ldep,rdep;
+    public List<Integer> leftrightSideView(TreeNode root) {
+        ldep=rdep=0;
+        ArrayList<Integer>ans= new ArrayList<>();
+        
+        if(root==null)return ans;
+        
+        // rightV(root,ans,1);
+        leftV(root,ans,1);
+
+        return ans;
+    }
+
+    private void leftV(TreeNode root,ArrayList<Integer>ans,int cdep){
+        
+        if(root==null)return;
+        
+        if(cdep>ldep){
+            ans.add(root.val);
+            ldep=cdep;
+        }
+        
+        leftV(root.left,ans,cdep+1);
+        leftV(root.right,ans,cdep+1);
+    }
+    
+    private void rightV(TreeNode root,ArrayList<Integer>ans,int cdep){
+        
+        if(root==null)return;
+        
+        if(cdep>rdep){
+            ans.add(root.val);
+            rdep=cdep;
+        }
+        
+        rightV(root.right,ans,cdep+1);
+        rightV(root.left,ans,cdep+1);
+    }
+
+    
+}
