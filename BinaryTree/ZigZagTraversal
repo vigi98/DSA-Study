@@ -1,0 +1,53 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    public List<List<Integer>> zigzagLevelOrder(TreeNode root) {
+        //Its how you insert it into answer and not how u insert it in queue while traversing
+        //Traversing is same as level order but only diff is the way we insert the poped elem into queue
+        
+        List<List<Integer>>ans= new ArrayList<>();
+        LinkedList<Integer>res;
+        
+        if(root==null)return ans;
+        
+        Queue<TreeNode>q= new ArrayDeque<>();
+        q.add(root);
+        boolean leftToRight=true;
+        
+        while(q.size()!=0){
+            int s=q.size();
+            res= new LinkedList<>();
+            
+            while(s-->0){
+                TreeNode top=q.remove();
+            
+                
+                if(leftToRight)
+                 res.addLast(top.val);
+                else
+                  res.addFirst(top.val);
+                    
+                if(top.left!=null)q.add(top.left);
+                if(top.right!=null)q.add(top.right);
+            }
+            
+            ans.add(res);
+            leftToRight=!leftToRight;
+        }
+    
+        return ans;
+    }
+}

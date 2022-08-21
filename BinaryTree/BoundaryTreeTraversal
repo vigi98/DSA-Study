@@ -1,0 +1,81 @@
+//User function Template for Java
+
+// class Node  
+// { 
+//     int data; 
+//     Node left, right; 
+   
+//     public Node(int d)  
+//     { 
+//         data = d; 
+//         left = right = null; 
+//     } 
+// }
+
+class Solution
+{
+    
+    private void traverseLeft(Node r,ArrayList<Integer>ans){
+        
+        if(r==null||(r.left==null && r.right==null))
+         return;
+         
+        ans.add(r.data);
+        
+        if(r.left!=null)
+          traverseLeft(r.left,ans);
+        else
+         traverseLeft(r.right,ans);
+        
+    }
+    
+    private void traverseLeaf(Node r,ArrayList<Integer>ans){
+        
+        if(r==null)return;
+        
+        if(r.left==null && r.right==null){
+            ans.add(r.data);
+            return;
+        }
+        
+        traverseLeaf(r.left,ans);
+        traverseLeaf(r.right,ans);
+    }
+    
+    private void traverseRight(Node r,ArrayList<Integer>ans){
+        if(r==null||(r.left==null && r.right==null))return;
+        
+        if(r.right!=null)traverseRight(r.right,ans);
+        else traverseRight(r.left,ans);
+        
+        ans.add(r.data);
+    }
+    
+	ArrayList <Integer> boundary(Node node)
+	{
+	    ArrayList<Integer>ans= new ArrayList<>();
+	    
+	    if(node==null)return ans;
+	    
+	    ans.add(node.data);
+	    
+	    //Left side for left-subtree, Right sideView for right subtree
+	    
+	    //LeftView
+	    traverseLeft(node.left,ans);
+	    
+	    
+	    //LeafNodes of left Subtree
+	    traverseLeaf(node.left,ans);
+	    //LeafNodes of right Subtree
+	    traverseLeaf(node.right,ans);
+	    
+	    
+	    //Right side
+	    traverseRight(node.right,ans);
+	    
+	    return ans;
+	}
+	
+	
+}
