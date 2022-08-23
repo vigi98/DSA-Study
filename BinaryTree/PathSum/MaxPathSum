@@ -1,0 +1,61 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    
+//     private class ViewP{
+//      int lv;
+//      int rv;
+    
+//      ViewP(){
+         
+//      }
+        
+//      ViewP(int l,int r){
+//          lv=l;
+//          rv=r;
+//      }
+        
+//     }
+    
+    private int maxpathSum;
+    public int maxPathSum(TreeNode root) {
+        
+        if(root==null)return 0;
+        
+        maxpathSum=Integer.MIN_VALUE;
+        
+        getPathSum(root);
+        
+        return maxpathSum;
+    }
+    
+    private int getPathSum(TreeNode r){
+        if(r==null){
+            return 0;
+        }
+        
+        int left=getPathSum(r.left);
+        int right=getPathSum(r.right);
+        
+        //either left-path,right-path, or no path(i.e the node itself is fine as adding with or right will reduce the value eg:[2 -1 -2])
+        int leftOrRightOrItself=Math.max(r.val,r.val+Math.max(left,right));
+        
+        //Checking pathSum for current Node. So for path sum we can include bot subtrees or we we can stay with one subtree. We will compare it with soFar maxPathSum
+        maxpathSum=Math.max(maxpathSum,Math.max(left+right+r.val,leftOrRightOrItself));
+        
+        return leftOrRightOrItself;
+    }
+}

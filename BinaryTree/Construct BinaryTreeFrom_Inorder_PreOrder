@@ -1,0 +1,78 @@
+1]TC->O(n^2) SC->O(n)
+
+class Solution {
+    private int pIndex;
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        pIndex=0;
+        int n=inorder.length-1;
+        return build(0,n,preorder,inorder);
+    }
+    
+    private TreeNode build(int l,int h,int[]preorder,int[]inorder){
+        
+        if(l>h||pIndex>=preorder.length)return null;
+        
+        int v=preorder[pIndex++];
+        
+        int temp=l;
+        while(temp<=h && inorder[temp]!=v)temp++;
+        
+        TreeNode node=new TreeNode(v);
+        
+        node.left=build(l,temp-1,preorder,inorder);
+        node.right=build(temp+1,h,preorder,inorder);
+        
+        return node;
+    } 
+}
+
+2] Optimized :- Using HashMap for Inorder
+//TC->O(n) SC->O(n)+O(n)
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
+class Solution {
+    private int pIndex;
+    private HashMap<Integer,Integer>inOrderMap;
+    
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        
+        pIndex=0;
+        int n=inorder.length;
+        inOrderMap= new HashMap<>();
+        //value->index map
+        
+        for(int i=0;i<n;i++)
+            inOrderMap.put(inorder[i],i);
+        
+        return build(0,n-1,preorder);
+    }
+    
+    private TreeNode build(int l,int h,int[]preorder){
+        
+        if(l>h||pIndex>=preorder.length)return null;
+        
+        int v=preorder[pIndex++];
+        
+        int temp=inOrderMap.get(v);//change(No need of for loop)
+        
+        TreeNode node=new TreeNode(v);
+        
+        node.left=build(l,temp-1,preorder);
+        node.right=build(temp+1,h,preorder);
+        
+        return node;
+    } 
+}
