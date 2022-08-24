@@ -1,0 +1,86 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+public class Codec {
+
+    // Encodes a tree to a single string.
+    public String serialize(TreeNode root) {//Can use PreOrder for serilalize ust like pepcoding input
+        
+        if(root==null)return "";
+        
+        StringBuilder ans=new StringBuilder();
+        LinkedList<TreeNode>ll=new LinkedList<>();
+        ll.addLast(root);
+        
+        while(ll.size()!=0){
+            TreeNode top=ll.removeFirst();
+          
+            if(top==null){
+              ans.append("# ");
+              continue;
+            }
+        
+            ans.append(top.val+" ");
+            ll.addLast(top.left);
+            ll.addLast(top.right);
+        }
+        
+        return ans.toString().trim();
+        
+    }
+
+    // Decodes your encoded data to tree.
+    public TreeNode deserialize(String data) {
+        
+        int len=data.length();
+        if(len==0)return null;
+        
+        String[]inp = data.split(" ");
+        int n= inp.length;
+        // System.out.println(Arrays.toString(inp));
+        return buildTree(inp,n);
+        
+    }
+    
+    private TreeNode buildTree(String[]inp,int n){
+        //[1, 2, 3, null, null, 4, 5, null, null, null, null]
+
+        int i=0;
+        
+        Queue<TreeNode>q= new ArrayDeque<>();
+        q.add(new TreeNode(Integer.parseInt(inp[i++])));
+        
+        TreeNode root=q.peek();
+        
+        while(q.size()!=0){
+            TreeNode top=q.remove();
+            
+            if(!inp[i].equals("#")){
+                top.left= new TreeNode(Integer.parseInt(inp[i]));
+                q.add(top.left);
+            }
+            
+            i++;//IP outside the if as for null also we should incr otherwise it won't if it is inside loop
+            
+            if(!inp[i].equals("#")){
+                top.right= new TreeNode(Integer.parseInt(inp[i]));
+                q.add(top.right);
+            }
+            
+            i++;//IP
+        }
+        
+        return root;
+    }
+}
+
+// Your Codec object will be instantiated and called as such:
+// Codec ser = new Codec();
+// Codec deser = new Codec();
+// TreeNode ans = deser.deserialize(ser.serialize(root));
