@@ -31,7 +31,8 @@ public class Codec {
             ll.addLast(top.right);
         }
         
-        return ans.toString().trim();
+        // return ans.toString().trim();
+        return ans.toString();//No need of trim as in deserilaize we are spliting in-terms of " "
         
     }
 
