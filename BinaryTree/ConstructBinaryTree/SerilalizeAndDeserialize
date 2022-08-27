@@ -10,7 +10,7 @@
 public class Codec {
 
     // Encodes a tree to a single string.
-    public String serialize(TreeNode root) {//Can use PreOrder for serilalize ust like pepcoding input
+    public String serialize(TreeNode root) {//Can use PreOrder for serilalize just like pepcoding input
         
         if(root==null)return "";
         

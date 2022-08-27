@@ -1,0 +1,52 @@
+class BinaryTree{
+      
+Node root;
+int floor;
+int ceil;
+  
+// Helper function to find floor and 
+// ceil of a given key in BST 
+public void floorCeilBSTHelper(Node root, 
+                               int key)
+{
+    while (root != null)
+    {
+        if (root.data == key) 
+        {
+            ceil = root.data;
+            floor = root.data;
+            return;
+        }
+  
+        if (key > root.data)
+        {
+            floor = root.data;
+            root = root.right;
+        }
+        else
+        {
+            ceil = root.data;
+            root = root.left;
+        }
+    }
+    return;
+}
+  
+// Display the floor and ceil of a 
+// given key in BST. If key is less
+// than the min key in BST, floor 
+// will be -1; If key is more than 
+// the max key in BST, ceil will be -1; 
+public void floorCeilBST(Node root, int key)
+{
+      
+    // Variables 'floor' and 'ceil' 
+    // are passed by reference 
+    floor = -1;
+    ceil = -1;
+  
+    floorCeilBSTHelper(root, key);
+  
+    System.out.println(key + " " + 
+                     floor + " " + ceil);
+}
