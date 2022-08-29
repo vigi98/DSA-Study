@@ -1,0 +1,58 @@
+//1]Only from left Side-> Using 2ptr and region concept
+class Solution {
+    public String removeStars(String s) {
+        //2 ptr
+        int i,j;
+        int n=s.length();
+        i=j=0;
+        
+        StringBuilder sb= new StringBuilder(s);
+        while(i<n){//only remove elem towards left-> mentioned in qn
+            char ch=sb.charAt(i);
+            if(ch=='*')j--;
+            else {
+                sb.setCharAt(j,ch);
+                j++;
+            }
+            
+            i++;
+        }
+        
+        sb=sb.replace(j,n,"");
+        return sb.toString();
+    }
+}
+
+2]From all Sides(Left and right)-> Using Stack
+
+class Solution {
+    public String removeStars(String s) {
+        
+        int n=s.length();
+        Stack<Character>st= new Stack<>();
+        StringBuilder sb= new StringBuilder();
+        
+        for(int i=0;i<n;i++){
+            char ch=s.charAt(i);
+            if(st.size()==0){
+                st.push(ch);continue;
+            }
+            
+            else if(ch=='*'){
+                if(st.peek()=='*')st.push(ch);
+                else st.pop();
+            }
+            
+            else{//ch
+                if(st.peek()=='*')st.pop();
+                else st.push(ch);
+            }
+        }
+        
+        while(st.size()!=0){
+            sb.append(st.pop());
+        }
+        
+        return sb.reverse().toString();
+    }
+}

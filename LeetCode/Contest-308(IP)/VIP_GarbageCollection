@@ -1,0 +1,36 @@
+class Solution {
+    public int garbageCollection(String[] garbage, int[] travel) {
+        int G=0,P=0,M=0;
+        int gLen=garbage.length;
+        int tLen=travel.length;
+        int pickUpTime=0;
+        
+        //Total Time=PickUpTime+TravelTime
+        //calculating pickUpTime and Last occurence of G,P,M(For travel Time)
+        for(int i=0;i<gLen;i++){
+            
+            String str=garbage[i];
+            int len=str.length();
+            pickUpTime+=len;
+            
+            for(int j=0;j<len;j++){
+                char ch=str.charAt(j);
+                if(ch=='G')G=i;
+                if(ch=='M')M=i;
+                if(ch=='P')P=i;
+            }            
+        }
+        
+        //Getting Prefix array
+        int []prefix=new int[tLen+1];
+        for(int i=1;i<prefix.length;i++){
+            prefix[i]=prefix[i-1]+travel[i-1];
+        }
+        
+        //Calculating travel Time
+        int travelTime=prefix[G]+prefix[M]+prefix[P];
+        
+        return pickUpTime+travelTime;
+        
+    }
+}

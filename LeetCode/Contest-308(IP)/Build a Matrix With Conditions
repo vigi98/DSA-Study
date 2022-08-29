@@ -1,0 +1,75 @@
+//Explanation in:https://www.youtube.com/watch?v=X9v68RR2X0w
+class Solution {
+    public int[][] buildMatrix(int k, int[][] rowConditions, int[][] colConditions) {
+        
+        //Given in qn atleast 1 condition will be there in rowCondn & colCondn
+        int []rowOrder=getCondOrder(rowConditions,k);
+        if(rowOrder.length==0)return new int[][]{};
+        
+        int []colOrder=getCondOrder(colConditions,k);
+        if(colOrder.length==0)return new int[][]{};
+        
+        HashMap<Integer,Integer>colPair= new HashMap<>();
+        for(int col=0;col<k;col++)
+            colPair.put(colOrder[col],col);
+        
+        int[][]ans= new int[k][k];
+        for(int r=0;r<k;r++){
+            int e=rowOrder[r];
+            int c=colPair.get(e);
+            ans[r][c]=e+1;//e+1
+        }
+        
+        return ans;
+    }
+    
+    private int[]getCondOrder(int[][]cond,int n){
+        
+        ArrayList<ArrayList<Integer>>graph= new ArrayList<>();
+        for(int i=0;i<n;i++)
+            graph.add(new ArrayList<>());
+        
+        for(int[]arr:cond)graph.get(arr[0]-1).add(arr[1]-1);//adding elements in 0-indexed form
+        
+        int[]inorder=getInOrder(graph);
+        
+        return getOrder(graph,inorder);
+        
+    }
+    
+    private int[]getInOrder(ArrayList<ArrayList<Integer>>graph){
+        int V=graph.size();
+        int []inorder= new int[V];
+        
+        for(int i=0;i<V;i++){
+            for(int nbr:graph.get(i))
+                inorder[nbr]++;
+        }
+        
+        return inorder;
+    }
+    
+    private int[]getOrder(ArrayList<ArrayList<Integer>>graph,int []inorder){
+        int n=inorder.length;
+        int ans[]= new int[n];
+        
+        Queue<Integer>q= new ArrayDeque<>();
+        for(int i=0;i<n;i++)
+            if(inorder[i]==0)q.add(i);
+        
+        int idx=0;
+        
+        while(q.size()!=0){
+            int top=q.remove();
+            ans[idx++]=top;
+            for(int nbr:graph.get(top)){
+                inorder[nbr]--;
+                if(inorder[nbr]==0)q.add(nbr);
+            }
+        }
+        
+        for(int e: inorder)if(e!=0)return new int[]{};
+        
+        return ans;
+    }
+}

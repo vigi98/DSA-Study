@@ -1,0 +1,66 @@
+M1-> Find inorder and store in array. TC-: next()->O(1) & hasNext->O(1) ; SC-:O(N)
+class BSTIterator {
+    
+    private ArrayList<Integer>inorder;
+    private int idx;
+    
+    public BSTIterator(TreeNode root) {
+        
+        inorder= new ArrayList<>();
+        getInOrder(root,inorder);
+        idx=0;
+    }
+    
+    private void getInOrder(TreeNode r,ArrayList<Integer>inorder){
+        
+        if(r==null)return;
+        
+        getInOrder(r.left,inorder);
+        inorder.add(r.val);
+        getInOrder(r.right,inorder);
+    
+    }
+    
+    public int next() {
+        return inorder.get(this.idx++);
+    }
+    
+    public boolean hasNext() {
+        return this.idx<inorder.size();
+    }
+}
+/**
+ * Your BSTIterator object will be instantiated and called as such:
+ * BSTIterator obj = new BSTIterator(root);
+ * int param_1 = obj.next();
+ * boolean param_2 = obj.hasNext();
+ */
+
+ M-2-> SC-> O(H) TC-> O(1)on avg
+
+ class BSTIterator {
+
+    private Stack<TreeNode>st;
+    
+    public BSTIterator(TreeNode root) {
+        st= new Stack<>();
+        pushAll(root);
+    }
+    
+    public int next() {
+        TreeNode top=st.pop();
+        pushAll(top.right);
+        return top.val;
+    }
+    
+    public boolean hasNext() {
+        return st.size()!=0;
+    }
+    
+    private void pushAll(TreeNode root){
+        while(root!=null){
+           st.push(root);
+           root=root.left;
+        }   
+    }
+}
