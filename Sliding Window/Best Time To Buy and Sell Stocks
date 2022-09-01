@@ -1,0 +1,17 @@
+class Solution {
+    public int maxProfit(int[] prices) {
+        int maxDiff=0;
+        int lp=0,hp=0,n=prices.length;
+        
+        while(hp<n){
+            
+            if(prices[lp]>prices[hp])lp=hp;
+
+            else maxDiff=Math.max(maxDiff,prices[hp]-prices[lp]);
+            
+            hp++;
+        }
+        
+        return maxDiff;
+    }
+}

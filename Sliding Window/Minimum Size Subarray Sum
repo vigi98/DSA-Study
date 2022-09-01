@@ -1,0 +1,30 @@
+class Solution {
+    public int minSubArrayLen(int target, int[] nums) {
+        
+        int ans=Integer.MAX_VALUE;
+        int n=nums.length;
+        int lp=0,rp=0,csum=0;
+        boolean flag=true;
+        
+        while(rp<n){
+            csum+=(flag?nums[rp]:-nums[lp-1]);
+            
+            if(lp==rp && csum>=target){
+                return 1;//minm possible value -> 1
+            }
+            
+            if(csum<target){
+                rp++;
+                flag=true;
+            }
+            else if(csum>=target){
+                ans=Math.min(ans,rp-lp+1);
+                lp++;
+                flag=false;
+            }
+            
+        }
+        
+        return ans==Integer.MAX_VALUE? 0: ans;
+    }
+}

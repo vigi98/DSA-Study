@@ -1,0 +1,31 @@
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        
+        int len=s.length();
+        
+        if(len<=1)return len;
+        
+        HashMap<Character,Integer>cIndex=new HashMap<>();
+        cIndex.put(s.charAt(0),0);
+        int lp=0,hp=1,maxCount=1,count=1;
+        
+        while(hp<len){
+            char ch=s.charAt(hp);
+            Integer idx=cIndex.get(ch);
+            
+            if(idx==null||idx<lp){//does not contain key or contains key and but idx<lp (NOT within the sliding range)
+              cIndex.put(ch,hp);
+              count++;
+            }else{//contains key and it's idx>=lp within the sliding range
+                lp=idx+1;
+                cIndex.put(ch,hp);
+                maxCount=Math.max(maxCount,count);
+                count=hp-lp+1;//New count value
+            }
+            
+            hp++;
+        }
+       
+        return Math.max(maxCount,count);
+    } 
+}
