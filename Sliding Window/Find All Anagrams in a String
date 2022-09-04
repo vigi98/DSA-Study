@@ -1,0 +1,79 @@
+class Solution {
+    
+    private boolean compare( HashMap<Character,Integer>reqMap,HashMap<Character,Integer>hm){
+        
+        // System.out.println("Inside cmp");
+        for(char ch: hm.keySet()){
+            // System.out.println("Getting hm and reqmap "+ch+" value");
+            int v1=hm.get(ch);
+            int v2=reqMap.getOrDefault(ch,0);
+            // System.out.println(hm.get(ch));
+            // System.out.println(reqMap.getOrDefault(ch,0));
+            // System.out.println(hm.get(ch)==reqMap.getOrDefault(ch,0));
+            if(v1!=v2)return false;
+        }
+        // System.out.println("True");
+        return true;
+    }
+    public List<Integer> findAnagrams(String s, String p) {
+        ArrayList<Integer>list= new ArrayList<>();
+        int sLen=s.length();
+        int pLen=p.length();
+        // System.out.println(sLen+" "+pLen);
+        
+        if(sLen<pLen){
+            // System.out.println("here");
+            return list;
+        }
+            
+        HashMap<Character,Integer>reqMap= new HashMap<>();
+        HashMap<Character,Integer>hm= new HashMap<>();
+        
+        
+        
+        for(int i=0;i<pLen;i++){
+            char ch=p.charAt(i);
+            reqMap.put(ch,reqMap.getOrDefault(ch,0)+1);
+        }
+        
+        System.out.println(reqMap);
+        
+         for(int i=0;i<pLen;i++){
+            char ch=s.charAt(i);
+            hm.put(ch,hm.getOrDefault(ch,0)+1);
+        }
+        
+        System.out.println(hm);
+        
+        int rp=pLen,lp=0;
+        while(rp<sLen){
+            // System.out.println("-----------");
+            // System.out.println("Current right pointing to the index- "+rp);
+            if(compare(reqMap,hm)){
+               list.add(lp);
+            }
+            
+            
+            
+            char ch=s.charAt(rp);
+            // System.out.println("Adding "+ch);
+            hm.put(ch,hm.getOrDefault(ch,0)+1);
+            // System.out.println(hm);
+            char rch=s.charAt(lp);
+            // System.out.println("Removing rch");
+            if(hm.get(rch)==1)hm.remove(rch);
+            else hm.put(rch,hm.get(rch)-1);
+            
+            // System.out.println(hm);
+            lp++;
+            rp++;
+        }
+        
+         if(compare(reqMap,hm)){
+               list.add(lp);
+            }
+        
+        return list;
+        
+    }
+}

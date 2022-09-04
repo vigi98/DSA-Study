@@ -22,10 +22,36 @@ class Solution {
                 maxCount=Math.max(maxCount,count);
                 count=hp-lp+1;//New count value
             }
-            
             hp++;
         }
        
         return Math.max(maxCount,count);
     } 
+}
+
+2]Better: Using HashSet
+
+class Solution {
+    public int lengthOfLongestSubstring(String s) {
+        HashSet<Character>hs= new HashSet<>();
+        int count=0,lp=0,hp=0,maxC=0;
+        
+        while(hp<s.length()){
+            char ch=s.charAt(hp);
+            if(hs.contains(ch)){
+                hs.remove(s.charAt(lp));
+                lp++;
+                maxC=Math.max(count,maxC);
+                count--;
+            }else{
+                hs.add(ch);
+                count++;
+                hp++;
+            }
+        }
+        
+        return Math.max(count,maxC);
+        
+        
+    }
 }

@@ -1,0 +1,57 @@
+class Solution {
+    public int maxFrequency(int[] nums, int k) {
+        
+        Arrays.sort(nums);
+        int lp=0,rp=0,n=nums.length;
+        int count=0,maxCount=0,windowLength=1;
+        
+        long total=0;
+        
+        while(rp<n){
+            
+            while(rp<n &&(nums[rp]*windowLength<=total+nums[rp]+k)){
+                count++;
+                windowLength++;
+                total+=nums[rp];
+                rp++;
+            }
+            //readusting the window 
+            maxCount=Math.max(count,maxCount);
+            
+            total-=nums[lp];
+            count--;
+            lp++;
+            windowLength--;
+            
+        }
+        
+        return maxCount;
+    }
+}
+
+2]
+class Solution {
+    public int maxFrequency(int[] nums, int k) {
+        //Step-1: Sorting->
+        Arrays.sort(nums);
+        //Step-2: Two-Pointers->
+        int L=0,R=0;
+        long totalSum=0;
+        int maxCount=1;
+        //Iterating over the array:
+        while(R<nums.length)
+        {
+            totalSum+=nums[R];
+            //The value of "totalSum+k" should be ">=" "windowSize*nums[R]"
+            //then only the window is possible else decrease the "totalSum" 
+            //till the value "totalSum+k" is ">=" "windowSize*nums[R]"
+            while(!(nums[R]*(R-L+1)<=totalSum+k)){
+                totalSum-=nums[L];
+                L++;
+            }
+            maxCount=Math.max(maxCount,(R-L+1));
+            R++;
+        }
+        return maxCount;
+    }
+}
