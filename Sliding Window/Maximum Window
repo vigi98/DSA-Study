@@ -1,0 +1,60 @@
+class Solution {
+    
+    private class QueueTask{
+        private LinkedList<Integer>ll;
+        
+        QueueTask(){
+            ll=new LinkedList<>();
+        }
+        
+        void add(int e){     
+            
+            while(ll.size()!=0 && ll.getLast()<e){
+                ll.removeLast();
+            }
+            ll.addLast(e);
+            
+        }
+        
+        int getMax(){
+            return ll.getFirst();
+        }  
+        
+        void remove(int e){
+            if(ll.getFirst()==e)ll.removeFirst();
+        }
+    }
+    
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        
+        int n=nums.length;
+        
+        if(n<k)return new int[]{};
+        
+        QueueTask q= new QueueTask();
+        int[]ans= new int[n-k+1];
+        int lp=0,hp=k,idx=0;
+        
+        //first slide
+        for(int i=0;i<k;i++){
+            q.add(nums[i]);
+        }
+        
+        while(hp<n){
+            
+            ans[idx++]=q.getMax();
+            //remove lp 
+            q.remove(nums[lp]);
+            //add hp
+            q.add(nums[hp]);
+            lp++;
+            hp++;
+            
+        }//end of while
+        
+        //last slide ans to be added
+        ans[idx]=q.getMax();       
+        
+        return ans;
+    }
+}

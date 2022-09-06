@@ -1,0 +1,47 @@
+class Solution {
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n=nums.length;
+        
+        if(n<k)return new int[]{};
+        
+        // Queue<Integer>q= new ArrayDeque<>();
+        
+        int max=Integer.MIN_VALUE;
+        int[]ans= new int[n-k+1];
+        for(int i=0;i<k;i++) max=Math.max(max,nums[i]);
+        
+        // q.add(max);    
+        int lp=0,hp=k,idx=0;
+        
+        while(hp<n){
+            // max=q.peek();
+            ans[idx++]=max;
+            
+            //remove lp from hashmap and check if it is max or not
+            int e=nums[lp];
+
+            if(max==e) max=getMax(nums,lp,hp);
+        
+            //check if element in hp, which is to be added, is max or not
+            max=Math.max(max,nums[hp]);
+            
+            lp++;
+            hp++;
+        }
+        
+        //last slide
+        ans[idx]=max;
+        
+        return ans;
+    }
+    
+    private int getMax(int nums[],int lp,int hp){
+        
+        int max=Integer.MIN_VALUE;
+        
+        for(int i=lp+1;i<hp;i++)
+            max=Math.max(max,nums[i]);
+        
+        return max;
+    }
+}

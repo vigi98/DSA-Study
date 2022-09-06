@@ -1,0 +1,97 @@
+class Solution {
+    public String minWindow(String s, String t) {
+        
+        int n=s.length(),tLen=t.length();
+        String ans="";
+        
+        if(tLen>n)return ans;
+        
+        int lp=0,hp=tLen,min=Integer.MAX_VALUE;
+        HashMap<Character,Integer>hm= new HashMap<>();
+        HashMap<Character,Integer>reqMap= new HashMap<>();
+        
+        for(int i=0;i<tLen;i++){
+            char ch=t.charAt(i);
+            reqMap.put(ch,reqMap.getOrDefault(ch,0)+1);
+            hm.put(ch,0);
+        }
+        
+        for(int i=0;i<tLen;i++){
+            char ch=s.charAt(i);
+            if(hm.containsKey(ch))hm.put(ch,hm.get(ch)+1);
+        }
+        
+        // System.out.println(reqMap);
+        // System.out.println(hm);
+        
+        while(hp<n){
+            if(compare(hm,reqMap)){
+                
+                // System.out.println("--------------");
+                // System.out.println(min);
+                // System.out.println(lp+" "+hp);
+                
+                if(min>(hp-lp)){
+                    ans=s.substring(lp,hp);
+                    min=hp-lp;
+                }
+                
+                if(min==tLen)return ans;//lowest possible ans
+                
+                char lpc=s.charAt(lp);
+                if(hm.containsKey(lpc))       
+                     hm.put(lpc,hm.get(lpc)-1); //decrement
+                
+                // System.out.println(hm);
+                lp++;    
+                    
+            }else{
+                
+                
+                
+                char hpc=s.charAt(hp);
+                if(hm.containsKey(hpc))       
+                     hm.put(hpc,hm.get(hpc)+1); //increment
+                
+                // System.out.println("--------------");
+                // System.out.println(hm);
+                // System.out.println(lp+" "+hp);
+                hp++;
+            }
+        }
+        
+        while(compare(hm,reqMap)){
+            
+            if(min>(hp-lp)){
+             ans=s.substring(lp,hp);
+             min=hp-lp;
+            }
+            
+            char lpc=s.charAt(lp);
+            if(hm.containsKey(lpc))       
+                hm.put(lpc,hm.get(lpc)-1); //decrement
+            
+            lp++; 
+        }
+        
+        return ans;
+    }
+    
+    private boolean compare(HashMap<Character,Integer>hm, HashMap<Character,Integer>reqMap){
+        // System.out.println("--------------");
+        // System.out.println(reqMap);
+        // System.out.println(hm);
+        
+        for(char key:reqMap.keySet()){
+            
+            int hmV=hm.get(key);
+            int reqV=reqMap.get(key);
+            
+            if(hmV<reqV)return false;//IP we are not comparing equal to reqV
+        }
+        
+        return true;
+    }
+         
+        
+}
