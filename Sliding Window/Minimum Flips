@@ -1,0 +1,33 @@
+class Solution {
+    
+    private String createFlips(char fc,int len){
+        
+        StringBuilder sb= new SringBuilder(fc+"");
+        
+        for(int i=1;i<len;i++){
+            char ch=sb.charAt(i-1);
+            sb.append(ch=='1'?'0':1);
+        }
+        
+        return sb.toString();
+    }
+    
+    public int minFlips(String s) {
+        int len=s.length();
+        
+        if(len=0||len==1)return 0;
+        
+        String alt1=createFlips('0',len);
+        String alt2=createFlips('1',len);
+        
+        int[]flips=getFlips(s,alt1,alt2);
+        
+        int ans=Math.min(flips[0],flips[1]);
+        
+        s=s+s;
+        alt1+=alt1;
+        alt2+=alt2;
+       
+        int lp=0,hp=len
+    }
+}
