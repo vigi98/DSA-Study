@@ -79,3 +79,91 @@ class Main {
     
   }
 }
+
+
+
+//2
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.*;
+
+class Main {
+
+  public static void main(String[] args) throws NumberFormatException, IOException {
+    BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+    String[] st = br.readLine().split(" ");
+    int n = Integer.parseInt(st[0]);
+    int m = Integer.parseInt(st[1]);
+
+    int[][] arr = new int[n][m];
+
+    for (int i = 0; i < n; i++) {
+      st = br.readLine().split(" ");
+      for (int j = 0; j < m; j++) {
+        arr[i][j] = Integer.parseInt(st[j]);
+      }
+    }
+
+    System.out.println(numDistinctIslands(arr));
+
+  }
+
+  public static StringBuilder psf = new StringBuilder();
+
+  public static int numDistinctIslands(int[][] arr) {
+
+    int n=arr.length,m=arr[0].length;
+    boolean[][]vis= new boolean[n][m];
+
+    HashSet<String>hs= new HashSet<>();
+
+    for(int i=0;i<n;i++){
+      for(int j=0;j<m;j++){
+
+        if(vis[i][j]|| arr[i][j]==0) continue;
+
+        psf.append("x");
+        getDirs(i,j,arr,vis);
+
+        hs.add(psf.toString());
+        psf=new StringBuilder();
+
+      }
+    }    
+    return hs.size();
+  }
+
+  private static String getMovement(int[]dir){
+    
+    if(dir[0]==0 && dir[1]==1) return "d";
+
+    else if(dir[0]==0 && dir[1]==-1) return "t";
+
+    else if(dir[0]==1 && dir[1]==0) return "r";
+
+    else return "l";
+  }
+
+
+  private static int[][]dirs={{0,1},{0,-1},{1,0},{-1,0}};
+  private static void getDirs(int i,int j,int[][]arr,boolean[][]vis){
+
+    vis[i][j]=true;
+    for(int[]dir:dirs){
+
+      int x=i+dir[0],y=j+dir[1];
+      if(x<0||x>=arr.length||y<0||y>=arr[0].length||arr[x][y]==0||vis[x][y]) continue;
+      
+      String whichSide=getMovement(dir);
+      psf.append(whichSide);
+      getDirs(x,y,arr,vis);
+
+    }
+
+    psf.append("z");
+    
+  }
+}

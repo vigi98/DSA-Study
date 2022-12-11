@@ -37,7 +37,7 @@ class Solution {
             Pair top=q.remove();
             
             for(int i=0;i<dirs.length;i++){
-                int rdash=top.x+dirs[i][0];
+                int rdash=top.xd+irs[i][0];
                 int cdash=top.y+dirs[i][1];
                 if(rdash>=0 && cdash>=0 && rdash<n && cdash<m && grid[rdash][cdash]==1){
                     //mark as rotten
@@ -99,5 +99,57 @@ class Solution {
         }
         
         return count==0?totalT:-1;
+    }
+}
+
+//Good way
+class Solution {
+
+    private class Pair{
+        int r,c,t;
+        Pair(int r,int c,int t){
+            this.r=r;
+            this.c=c;
+            this.t=t;
+        }
+    }
+
+    private int[][]dirs={{0,1},{1,0},{0,-1},{-1,0}};
+    public int orangesRotting(int[][] arr) {
+        
+        int minTime=0,n=arr.length,m=arr[0].length;
+        Queue<Pair>q= new ArrayDeque<>();
+        // boolean[][]vis=new boolean[n][m];
+
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(arr[i][j]==2) q.add(new Pair(i,j,0));
+            }
+        }
+
+        while(q.size()!=0){
+            Pair top=q.remove();
+            int r=top.r,c=top.c,t=top.t;
+            if(t!=0 && arr[r][c]==2)continue;//if first time then check for time=0 otherwise the code will never start
+
+            arr[r][c]=2;
+            minTime=Math.max(minTime,t);
+
+            for(int[]dir:dirs){
+                int x=r+dir[0],y=c+dir[1];
+                if(x<0||y<0||x>=n||y>=m||arr[x][y]==0||arr[x][y]==2)continue;
+                q.add(new Pair(x,y,t+1));
+            }
+
+        }
+
+        //Check if any fresh available
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(arr[i][j]==1) return -1;
+            }
+        }
+
+        return minTime;
     }
 }
