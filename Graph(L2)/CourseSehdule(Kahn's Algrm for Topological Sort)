@@ -1,3 +1,53 @@
+//1 leetode
+class Solution {
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        ArrayList<ArrayList<Integer>>adj= new ArrayList<>();
+        for(int i=0;i<numCourses;i++){
+            adj.add(new ArrayList<>());
+        }
+        
+        int n=prerequisites.length;
+        for(int i=0;i<n;i++){
+            adj.get(prerequisites[i][1]).add(prerequisites[i][0]);
+        }
+        
+        return findTopOrder(numCourses,adj);
+    }
+    
+    private boolean findTopOrder(int n,ArrayList<ArrayList<Integer>>adj){
+        
+        int[]inorder=new int[n];
+        for(int i=0;i<n;i++){
+            for(int nbr:adj.get(i)){
+                inorder[nbr]++;
+            }
+        }
+        
+        Queue<Integer>q= new ArrayDeque<>();
+        for(int i=0;i<n;i++)
+            if(inorder[i]==0)
+                q.add(i);
+        
+        int count=0;
+        
+        while(q.size()!=0){
+            int top=q.remove();
+            count++;
+            for(int nbr: adj.get(top)){
+                inorder[nbr]--;
+                if(inorder[nbr]==0)
+                    q.add(nbr);
+            }
+        }
+        
+     return count==n;
+        
+        
+    }
+}
+
+
+//2
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
