@@ -1,0 +1,121 @@
+import java.util.*;
+
+class Main {
+  public static class LRUCache {
+
+    private class Node{
+     int key,val;
+     Node prev;
+     Node next;
+     
+     Node(int k,int v){
+       key=k;
+       val=v;
+     }      
+    }
+
+    private int size,curSize;
+    HashMap<Integer,Node>hm;
+    Node head,tail;
+
+    public LRUCache(int capacity) {
+     size=capacity;
+     hm= new HashMap<>();
+     head= new Node(-1,-1);
+     tail= new Node(-1,-1);
+     head.next=tail;
+     tail.prev=head;
+    }
+
+    public int get(int key) {
+      if(!hm.containsKey(key))return -1;
+
+      //Update position in LL
+      //remove From wherewere it is
+      Node renewNode=hm.get(key);
+      removeNode(renewNode);
+      //add to front
+      addFirst(renewNode);
+
+      return renewNode.val;
+    }
+
+    // app name, app state
+    public void put(int key, int value) {
+      
+      //first check if it already exists
+      if(hm.containsKey(key)){
+        Node prevOld=hm.get(key);
+        removeNode(prevOld);//
+        hm.remove(key);
+        curSize--;
+      }
+
+      //if cache size is full      
+      if(curSize>=size){
+          Node lastNode=removeLast();//
+          hm.remove(lastNode.key);
+          curSize--;
+      }
+
+      Node newN= new Node(key,value);
+      addFirst(newN);//
+      hm.put(key,newN);
+
+      curSize++;
+    }
+
+    private void addFirst(Node node){
+
+      Node next=head.next;
+      
+      head.next=node;
+      node.prev=head;
+
+      node.next=next;
+      next.prev=node;
+    }
+
+    private void removeNode(Node node){
+      Node prev=node.prev;
+      Node next=node.next;
+
+      prev.next=next;
+      next.prev=prev;
+
+      node.next=node.prev=null;
+      // System.out.println("Removed node is :"+node.val);
+    }
+
+    private Node removeLast(){
+      Node node=tail.prev;
+      Node prev=node.prev;
+
+      tail.prev=prev;
+      prev.next=tail;
+
+      node.next=node.prev=null;
+      // System.out.println("Removed Last node is :"+node.val);
+
+      return node;
+    }
+
+  }
+
+  public static void main(String[] args) {
+    Scanner scn = new Scanner(System.in);
+
+    int n = scn.nextInt(); // no of operations
+    // 0 stand for put, 1 stand for get
+    int size = scn.nextInt();
+    LRUCache lru = new LRUCache(size);
+
+    while (n-- > 0) {
+      int op = scn.nextInt();
+      if (op == 0)
+        lru.put(scn.nextInt(), scn.nextInt());
+      else
+        System.out.println(lru.get(scn.nextInt()));
+    }
+  }
+}

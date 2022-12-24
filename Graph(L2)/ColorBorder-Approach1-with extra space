@@ -45,7 +45,7 @@ class Solution {
         
         
         boolean isBorder=false;
-        grid[r][c]=-1*origColor;
+        grid[r][c]=-1*origColor;// Need to mark it -1*val . To show as visited.
         for(int i=0;i<4;i++){
             if(!markBorder(r+dir[i][0],c+dir[i][1],origColor,grid,borderList))//Check if any of the components is not part of the connected component
                 isBorder=true;
